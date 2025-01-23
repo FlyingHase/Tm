@@ -1,0 +1,2 @@
+# Tm
+Turing maskin programm.
