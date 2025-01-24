@@ -1,0 +1,180 @@
+;#######################################################################################
+;  multiplikator_V2
+
+;  Programmet beräknar produkten de binära talen a och b
+;  dessa ska anges likt följande :a_b: med kolon inklusive
+ 
+;  programmet är klart när det stannar av sig självt
+;       produkten är då det vänstra talet.
+;       formen i slutet är :produkt_a_b:
+
+;  En fungerande / testad input är :1111_11011:
+;       denna borde ge :110010101_1111_11011:
+
+;  Dessutom ska "initial state" vara 0 
+
+
+;#######################################################################################
+; första siffran i starenamnet indikerar vilket tal läsaren är på. 0 är det vänstra och 
+; 1 det högra. a:et innebär att det är del av "adder"
+
+; grundstatet, gå till slutet av talet a och in i 10 b talets State 
+ 
+0 * * R 0
+0 _ _ R 10 
+0 : : R 0 ;vi börjar ju på ett kolon :)
+
+;gå tillslutet av b och läs av
+10 0 0 R 10
+10 1 1 R 10
+10 a a L r
+10 b b L r
+10 : : L r
+10 _ _ R 10 ; dirty fix :/
+
+;läs av
+r 1 b L 1mr1
+r 0 a L 1mr0
+r _ _ L finish0 
+
+
+;vi läste en etta går till början av högra talet och in i andra vid _
+1mr1 0 0 L 1mr1
+1mr1 1 1 L 1mr1
+1mr1 _ _ L 0mr1
+
+;hittar första obehandlade tal byter detta till a/b adderar ett eller ej
+0mr1 * * L 0mr1
+0mr1 1 b L a1c1
+0mr1 0 a L a1c0
+
+;vi läste en nolla gör samma som ovan.
+1mr0 0 0 L 1mr0
+1mr0 1 1 L 1mr0
+1mr0 _ _ L 0mr0
+
+;hittar första obehandlade tal, byter detta till a/b men adderar 0
+0mr0 1 1 L 1moveover0
+0mr0 0 0 L 1moveover0
+0mr0 * * L 0mr0
+
+1moveover0 * * L 1moveover0
+1moveover0 _ _ L 0moveover0
+1moveover0 : _ L 0moveover0
+
+0moveover0 : p L markend0
+0moveover0 _ p L markend0
+0moveover0 1 q R areset
+0moveover0 0 p R areset
+0moveover0 * * L 0moveover0
+
+markend0 _ : R areset
+
+
+;################################  Adder begin.  ###################################### 
+
+; a0 är grundstate gå till höger tills mellanrummet mellan talen 
+;och gå därefter in i "0" state för högra talet dvs "10"
+a0 * * R a0 
+a0 _ _ r a10
+
+; 10 är likn 0 state fast för talet till höger. vid sista talet gå in i läs stadiet "r"
+a10 * * R a10
+a10 b b L m1r
+a10 a a L m1r
+a10 x x L m0r
+a10 y y L m0r
+a10 _ _ L ar
+
+;läs av sista talet och gå in i 1c1 om sista talet är en 
+;etta och 1c0 om sista talet är en nolla
+; gå in i finish om det sista talet ej finns
+
+ar 1 _ L a1c1
+ar 0 _ L a1c0
+ar x _ L ar
+ar y _ L ar
+ar _  _ L afinish
+
+m1r 1 b L a1c1
+m1r 0 a L a1c0 
+m1r _ _ r areturn
+
+m0r 1 y L a1c0
+m0r 0 x L a1c0 
+m0r _ _ r areturn
+
+a0c1 1 a L aoverflow ; a=0
+a0c1 0 b L a0 ; b =1
+a0c1 _ b L markend
+a0c1 : b L markend
+
+a0c1 a a L a0c1
+a0c1 b b L a0c1
+a0c1 * * L a0c1
+
+aoverflow 1 0 L aoverflow
+aoverflow _ 1 L markend
+aoverflow : 1 L markend
+aoverflow 0 1 R a0
+
+markend _ : R a0
+
+a0c0 * * L a0c0
+a0c0 : a L markend
+a0c0 1 b R a0
+a0c0 0 a R a0
+a0c0 _ a L markend
+
+
+
+a1c1 * * L a1c1
+a1c1 : _ L a0c1
+a1c1 _ _ l a0c1
+
+a1c0 * * L a1c0
+a1c0 : _ L a0c0
+a1c0 _ _ l a0c0
+
+afinish a 0 L afinish
+afinish b 1 L afinish
+
+areturn * * L areturn
+areturn : : R aresetsum
+
+aresetsum a 0 R aresetsum
+aresetsum b 1 R aresetsum
+aresetsum x 0 R aresetsum
+aresetsum y 1 R aresetsum
+aresetsum p p L moveover
+aresetsum q q L moveover
+aresetsum _ _ L moveover
+aresetsum * * R aresetsum
+
+moveover 1 q R areset
+moveover 0 p R areset
+
+
+areset a 0 R areset
+areset b 1 R areset
+areset x 0 R areset
+areset y 1 R areset
+areset _ _ R areset
+areset p p R areset
+areset q q R areset
+areset * * R 10
+areset : : L finish
+
+;################################  Adder end  ######################################
+;################################  Finnisher begin  ######################################
+
+
+finish0 * * R finish0
+finish0 : : L finish
+
+finish p 0 L finish
+finish q 1 L finish
+finish a 0 L finish
+finish b 1 L finish
+finish * * L finish
+finish : : L halt-accept
