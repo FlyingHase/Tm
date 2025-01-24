@@ -1,0 +1,40 @@
+
+; #######################################  Dubbla ettan V1 ############################################
+;
+; Programmet dubblar sekvensen ettor och nollor
+; Programmet startas i state 0
+; Input bör vara på formen _a_ där a är sekvensen
+; Programmet är klart när det stannar och ger då _aa' där a' är omvända sekvensen
+;
+; ########################################################################################
+
+0 1 1 R 0
+0 0 0 R 0
+0 _ _ L r
+
+r 1 a R r1
+r 0 b R r0
+r a a L r
+r b b L r
+
+r1 1 1 R r1
+r1 0 0 R r1
+r1 a a R r1
+r1 b b R r1
+r1 _ 1 L return
+
+r0 1 1 R r0
+r0 0 0 R r0
+r0 a a R r0
+r0 b b R r0
+r0 _ 0 L return
+
+return 1 1 L return
+return 0 0 L return
+return a a L r
+return b b L r
+
+r _ _ R finish
+finish a 1 R finish
+finish b 0 R finish
+finish * * R halt
