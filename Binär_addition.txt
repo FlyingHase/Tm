@@ -1,0 +1,61 @@
+;##################################  Addition v1  ################################################
+
+;  Programmet adderar två de två binära talen talen a och b
+;  dessa bör matas in på formen _a_b_
+;  Programmet startas i state 0 och stannar när det är klart.
+;  Då visas summan på formen _s_  
+
+;####################################################################################################################################################################
+
+
+
+; 0 är grundstate gå till höger tills mellanrummet mellan talen 
+;och gå därefter i i "0" state för högra talet dvs "10"
+0 1 1 R 0
+0 0 0 R 0
+0 a a R 0
+0 b b R 0
+0 _ _ r 10
+
+; 10 är likn 0 state fast för talet till höger. vid sista talet gå in i läs stadiet "r"
+10 0 0 R 10
+10 1 1 R 10
+10 _ _ L r
+
+;läs av sista talet och gå in i 1c1 om sista talet är en 
+;etta och 1c0 om sista talet är en nolla
+; gå in i finish om det sista talet ej finns
+
+r 1 _ L 1c1
+r 0 _ L 1c0
+r _  _ L finish
+
+0c1 1 a L overflow ; a=0
+0c1 0 b L 0 ; b =1
+0c1 _ b r 0
+
+0c1 a a L 0c1
+0c1 b b L 0c1
+
+overflow 1 0 L overflow
+overflow _ 1 R 0
+overflow 0 1 R 0
+
+0c0 1 b R 0
+0c0 0 a R 0
+
+0c0 b b L 0c0
+0c0 a a L 0c0
+
+
+1c1 1 1 L 1c1
+1c1 0 0 L 1c1
+1c1 _ _ l 0c1
+
+1c0 1 1 L 1c1
+1c0 0 0 L 1c1
+1c0 _ _ l 0c0
+
+finish a 0 L finish
+finish b 1 L finish
+finish * * L halted
