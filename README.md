@@ -1,2 +1,3 @@
 # Tm
-Turing maskin programm.
+Dessa är mina turingmaskinprogramm. 
+De borde fungera, förhoppningsvis...
