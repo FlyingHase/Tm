@@ -2,7 +2,7 @@
 ; ##############################  Minimalistisk counter (addera 1)  ############################################
 ;
 ;  Programmet räknar uppåt i steg om ett eller adderar ett
-;  Godtagbara inputs för att räkna uppåt är _a_ där a är start talet, för att bara addera 1 bör
+;  Godtagbara inputs för att räkna uppåt är a där a är start talet, för att bara addera 1 bör
 ;  vara på formen _a: där a är talet till vilket ett ska adderas
 ; 
 ;  programmet ska startas i state 0 och stannar när det har adderat ett annars fortsätter det 
