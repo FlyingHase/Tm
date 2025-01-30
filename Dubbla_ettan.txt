@@ -3,7 +3,7 @@
 ;
 ; Programmet dubblar sekvensen ettor och nollor
 ; Programmet startas i state 0
-; Input bör vara på formen _a_ där a är sekvensen
+; Input bör vara på formen a där a är sekvensen
 ; Programmet är klart när det stannar och ger då _aa' där a' är omvända sekvensen
 ;
 ; ########################################################################################
