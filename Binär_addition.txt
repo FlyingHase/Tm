@@ -1,7 +1,7 @@
 ;##################################  Addition v1  ################################################
 
 ;  Programmet adderar två de två binära talen talen a och b
-;  dessa bör matas in på formen _a_b_
+;  dessa bör matas in på formen a_b
 ;  Programmet startas i state 0 och stannar när det är klart.
 ;  Då visas summan på formen _s_  
 
